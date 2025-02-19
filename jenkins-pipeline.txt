@@ -15,14 +15,14 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'master', url: 'https://github.com/Nirajdiwan45/-Live-Streaming-WebApp-Development-using-Devsecops-Tools..git'
+                git branch: 'master', url: 'https://github.com/CHETANSALUNKHE025/PG-DITISS-DevSecOps-.git'
             }
         }
         stage("Sonarqube Analysis "){
             steps{
                 withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Netflix \
-                    -Dsonar.projectKey=Netflix '''
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=moviesdb \
+                    -Dsonar.projectKey=moviesdb '''
                 }
             }
         }
@@ -53,8 +53,8 @@ pipeline{
             steps{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                       sh "docker build --build-arg TMDB_V3_API_KEY=f91fb8f17a974e3e9f20cd8bcc682eef -t netflix ."
-                       sh "docker tag netflix chetan2512/projectdevsecops:latest "
+                       sh "docker build --build-arg TMDB_V3_API_KEY=f91fb8f17a974e3e9f20cd8bcc682eef -t moviesdb ."
+                       sh "docker tag moviesdb chetan2512/projectdevsecops:latest "
                        sh "docker push chetan2512/projectdevsecops:latest "
                     }
                 }
@@ -67,7 +67,7 @@ pipeline{
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name netflix -p 80:80 chetan2512/projectdevsecops:latest'
+                sh 'docker run -d --name moviesdb -p 80:80 chetan2512/projectdevsecops:latest'
             }
         }
     }
